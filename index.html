@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#708464">
+<meta name="description" content="Rabbit Adventure: a six-level woodland puzzle game you can play with the keyboard, touch, or by pointing at your webcam.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Rabbit Adventure | The Woodland Trials</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============================== TITLE ============================== -->
+  <section id="title" class="screen">
+    <div class="title-art"></div>
+    <div class="title-card">
+      <p class="eyebrow">A HAND-CONTROLLED WOODLAND ADVENTURE</p>
+      <h1>Rabbit<br>Adventure</h1>
+      <p class="sub">THE WOODLAND TRIALS</p>
+      <p class="tagline">Collect the carrots. Find your way home.</p>
+      <div class="buttons">
+        <button id="btn-play" class="btn primary" type="button">Begin adventure &nbsp;&rsaquo;</button>
+        <button id="btn-play-hand" class="btn" type="button">Play with hand control</button>
+        <button id="btn-help" class="btn ghost" type="button">How to play</button>
+      </div>
+      <p class="keys"><span class="only-keyboard">ENTER Begin &nbsp; H Instructions &nbsp; </span>SIX FOREST TRIALS &nbsp;/&nbsp; HANDS, TOUCH OR KEYS</p>
+    </div>
+
+    <div id="help" class="overlay hidden" role="dialog" aria-labelledby="help-title">
+      <div class="panel help-panel">
+        <p class="kicker">YOUR FIELD GUIDE</p>
+        <h2 id="help-title">Find your way home.</h2>
+        <ol class="guide">
+          <li><b>Your goal</b><span>Collect every carrot, then reach the burrow.</span></li>
+          <li><b>Move</b><span>WASD or arrows, the on-screen pad (swipe on the board works too), or point with one index finger at your camera.</span></li>
+          <li><b>Stop</b><span>Open your palm or make a fist. P pauses, R retries.</span></li>
+          <li><b>Privacy</b><span>Hand tracking runs on your device. Your camera video is never uploaded or recorded.</span></li>
+        </ol>
+        <div class="row">
+          <button id="btn-help-start" class="btn primary" type="button">Enter the forest &nbsp;&rsaquo;</button>
+          <button id="btn-help-close" class="btn ghost" type="button">Back</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== GAME ============================== -->
+  <section id="game" class="screen hidden">
+    <header id="hud" class="panel">
+      <span id="hud-level" class="hud-level">01 / 06</span>
+      <span id="hud-title" class="hud-title">Carrot Trail</span>
+      <span id="hud-carrots" class="hud-carrots">Carrots 0 / 0</span>
+      <span class="hud-buttons">
+        <button class="icon" id="btn-pause" type="button" aria-label="Pause" title="Pause (P)">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></svg></button>
+        <button class="icon" id="btn-retry" type="button" aria-label="Retry level" title="Retry (R)">
+          <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5" /></svg></button>
+        <button class="icon" id="btn-mute" type="button" aria-label="Toggle sound" title="Sound (M)">
+          <svg viewBox="0 0 24 24" class="snd-on"><path d="M4 10v4h4l5 4V6L8 10H4zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" /></svg>
+          <svg viewBox="0 0 24 24" class="snd-off"><path d="M4 10v4h4l5 4V6L8 10H4zM17 9l5 6M22 9l-5 6" /></svg></button>
+        <button class="icon" id="btn-full" type="button" aria-label="Fullscreen" title="Fullscreen (F)">
+          <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg></button>
+      </span>
+    </header>
+
+    <main id="stage"><div class="frame"><canvas id="board" aria-label="Game board"></canvas></div></main>
+
+    <aside id="side">
+      <div id="cam-card" class="panel">
+        <div class="cam-head">HAND CONTROL</div>
+        <div class="cam-view" id="cam-view">
+          <canvas id="cam" width="320" height="240"></canvas>
+          <div id="cam-msg">Point with one finger to move.<br>Camera stays on your device.</div>
+        </div>
+        <div class="cam-status"><i id="cam-dot"></i><span id="cam-label">Camera off</span></div>
+        <button id="btn-cam" class="btn small" type="button">Turn on hand control</button>
+      </div>
+      <div id="dpad" aria-label="Touch controls">
+        <button data-dir="up" type="button" aria-label="Up"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
+        <button data-dir="left" type="button" aria-label="Left"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button data-dir="right" type="button" aria-label="Right"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button data-dir="down" type="button" aria-label="Down"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+    </aside>
+
+    <footer id="hintbar">
+      <div id="hint"></div>
+      <div id="status"></div>
+      <div id="controls-hint" class="only-keyboard">WASD / arrows or point to move &nbsp;&middot;&nbsp; Palm / fist to stop &nbsp;&middot;&nbsp; P Pause &nbsp;&middot;&nbsp; R Retry &nbsp;&middot;&nbsp; F Fullscreen</div>
+    </footer>
+  </section>
+
+  <!-- ============================== MODAL ============================== -->
+  <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="petals" aria-hidden="true"></div>
+    <div class="panel modal-panel">
+      <p class="kicker" id="modal-kicker"></p>
+      <h2 id="modal-title"></h2>
+      <p id="modal-copy" class="copy"></p>
+      <p id="modal-stats" class="stats"></p>
+      <div class="row">
+        <button id="modal-primary" class="btn primary" type="button"></button>
+        <button id="modal-secondary" class="btn ghost" type="button">Back to title</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading"><div class="spinner"></div><p>Loading the forest&hellip;</p></div>
+  <noscript><p style="padding:2rem;color:#fff">Rabbit Adventure needs JavaScript enabled.</p></noscript>
+</div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
